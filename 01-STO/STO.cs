@@ -16,7 +16,6 @@ namespace _01_STO
         {
             Cars.Add(c);
         }
-
         public void RepairCar()
         {
             Repair.Add(Cars[0]);
@@ -30,30 +29,56 @@ namespace _01_STO
 
         public IEnumerator GetEnumerator()
         {
-            return new Iteration(this);
+            return new MyIterator(this);
         }
 
-        struct Iteration
+        struct MyIterator : IEnumerator
         {
-            int lst;
-            int ar;
-            Car[][] arr = new Car[3][];          
+            STO sto;
+            int current_lst;
+            int current_arr;
+            List<Car>[] carl;
+            public MyIterator(STO s)
+            {
+                sto = s;
+                carl = new List<Car>[3];
+                carl[0] = sto.Cars;
+                carl[1] = sto.Repair;
+                carl[2] = sto.Finish;
+                current_lst = 0;
+                current_arr = -1;
+            }
             public object Current
             {
                 get
                 {
-                    return car[lst][ar];
+                    return carl[current_lst][current_arr];
                 }
             }
 
             public bool MoveNext()
             {
-                ;
+                if (carl[current_lst].Count-1 > current_arr)
+                {
+                    current_arr++;
+                    return true;
+                }
+                else if (current_lst < 2)
+                {    
+                    current_arr = 0;
+                    current_lst++;
+                    if (carl[current_lst].Count == 0)
+                        MoveNext();
+                    return true;
+                }
+                else
+                    return false;
             }
 
             public void Reset()
             {
-                throw new NotImplementedException();
+                current_lst = 0;
+                current_arr = -1;
             }
         }
     }

@@ -21,5 +21,9 @@ namespace _01_STO
             Name = n;
             Year = y;
         }
+        public override string ToString()
+        {
+            return $"Name: {Name} \t| Year: {Year}"; 
+        }
     }
 }
